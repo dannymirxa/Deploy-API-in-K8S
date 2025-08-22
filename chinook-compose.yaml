@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:17
+    container_name: chinook-postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_DB=chinook_db
+    ports:
+      - "5432:5432"
+    volumes:
+      # Mount your DDL file so Postgres runs it at startup
+      - ./Chinook_PostgreSql.sql:/docker-entrypoint-initdb.d/Chinook_PostgreSql.sql
+      # Persist database data between restarts
+      - postgres_data:/var/lib/postgresql/data
+    secrets:
+      - postgres_password
+    networks:
+    - app-network
+
+secrets:
+  postgres_password:
+    file: ./chinook_password.txt
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  app-network:
+    external: true
