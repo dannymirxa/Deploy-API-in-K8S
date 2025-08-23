@@ -1,0 +1,20 @@
+services:
+  fastapi_app:
+    image: fastapi-employee:latest
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: fastapi-dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - ENV=production
+    container_name: fastapi_app
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true
