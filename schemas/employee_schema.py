@@ -18,7 +18,9 @@ SELECT DISTINCT Ar."name"  FROM artist AS Ar
 """
 # app/schemas/employee_schema.py
 
-from datetime import datetime
+from datetime import datetime, date
+from typing import Optional
+from decimal import Decimal
 from typing import Optional
 from pydantic import BaseModel, Field, EmailStr
 
@@ -65,4 +67,24 @@ class EmployeeRead(EmployeeBase):
     employee_id: int
 
     class Config:
-        ffrom_attributes = True
+        from_attributes = True
+
+class EmployeeTotalSales(BaseModel):
+    first_name: str = Field(None, max_length=20)
+    last_name: str = Field(None, max_length=20)
+    totalsales: Decimal = None
+
+    # class Config:
+    #     from_attributes = True
+
+class EmployeePerformanceRequest(BaseModel):
+    title: Optional[str]
+    invoice_date: Optional[date]
+
+class EmployeePerformanceRead(BaseModel):
+    employee_id: int
+    first_name: str = Field(None, max_length=50)
+    last_name: str = Field(None, max_length=50)
+    customershandled: int
+    totalsales: Decimal = None
+    avginvoicevalue: Decimal = None
