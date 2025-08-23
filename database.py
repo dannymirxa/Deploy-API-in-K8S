@@ -1,25 +1,60 @@
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import declarative_base
-import psycopg2
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
-# DATABASE_URL = "postgresql://myuser:mypassword@localhost:5432/Employees"
+from sqlalchemy.ext.asyncio import (
+    AsyncSession,
+    create_async_engine,
+)
+from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.sql import text
 
-# engine = create_engine(DATABASE_URL)
+from settings import app_env_settings as settings
 
-# SessionLocal = sessionmaker(autoflush=False, bind=engine)
+class Database:
+    """Manages asynchronous DB sessions with connection pooling."""
 
-Base = declarative_base()
+    def __init__(self) -> None:
+        database_url = (
+            f"postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}"
+            f"@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
+        )
 
-# DATABASE_URL = "postgresql://myuser:mypassword@localhost:5432/Employees"
+        self.engine = create_async_engine(
+            database_url,
+            echo=True,
+            future=True,
+        )
 
-def get_db_connection():
-    conn = psycopg2.connect(
-        # host="employee_db",
-        host="localhost",
-        port=5432,
-        database="chinook",
-        user="myuser",
-        password="mypassword"
-    )
-    return conn
+    async def ping_database(self):
+        try:
+            async with self.engine.connect() as conn:
+                await conn.execute(text("SELECT 1"))
+            print("Successfully connected to the Database!")
+        except Exception as e:
+            print(f"Error connecting to database: {e}")
+    
+    @asynccontextmanager
+    # any function decorated with @asynccontextmanager
+    # internally becomes an async generator,
+    # not a plain coroutine returning AsyncSession
+    async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
+        async_session = sessionmaker(self.engine, class_=AsyncSession)
+        session = None
+        try:
+            session = async_session()
+            async with session:
+                yield session
+        except Exception as e:
+            await session.rollback()
+            raise e
+        finally:
+            await session.close()
+
+    async def close_database(self) -> None:
+        """Dispose of the database engine."""
+        if self.engine:
+            await self.engine.dispose()
+
+
+base = declarative_base()
+database = Database()
