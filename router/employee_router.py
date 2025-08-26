@@ -11,6 +11,7 @@ from schemas.employee_schema import (
     EmployeePerformanceRequest,
     EmployeePerformanceRead
 )
+
 router = APIRouter(prefix="/employees")
 
 @router.get("/", response_model=list[EmployeeRead])
@@ -44,6 +45,7 @@ async def get_employee_total_sales(db: AsyncSession = Depends(database.get_sessi
         """)
         result = await session.execute(stmt)
         rows = result.mappings().all()
+        await session.commit()
         return [EmployeeTotalSales(**row) for row in rows]
 
 @router.post("/employee_performance", response_model=list[EmployeePerformanceRead])
@@ -74,6 +76,7 @@ async def get_employee_total_sales(employee_performance_request: EmployeePerform
         """)
         result = await session.execute(stmt, {"title": f'%{employee_performance_request.title}%', "invoice_date": employee_performance_request.invoice_date})
         rows = result.mappings().all()
+        await session.commit()
         return [EmployeePerformanceRead(**row) for row in rows]
 
 @router.get("/employee/{employee_id}", response_model=EmployeeRead)
