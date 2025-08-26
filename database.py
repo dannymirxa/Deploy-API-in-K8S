@@ -13,14 +13,11 @@ from settings import app_env_settings as settings
 class Database:
     """Manages asynchronous DB sessions with connection pooling."""
 
-    def __init__(self) -> None:
-        database_url = (
-            f"postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}"
-            f"@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
-        )
+    def __init__(self, database_url) -> None:
+        self.database_url = database_url
 
         self.engine = create_async_engine(
-            database_url,
+            self.database_url,
             echo=True,
             future=True,
         )
@@ -59,4 +56,10 @@ class Database:
 
 
 base = declarative_base()
-database = Database()
+
+
+database_url = (
+            f"postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}"
+            f"@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
+        )
+database = Database(database_url)
