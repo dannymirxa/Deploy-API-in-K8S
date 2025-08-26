@@ -29,9 +29,11 @@ class Database:
         try:
             async with self.engine.connect() as conn:
                 await conn.execute(text("SELECT 1"))
-            print("Successfully connected to the Database!")
+            # print("Successfully connected to the Database!")
+            return "connected"
         except Exception as e:
-            print(f"Error connecting to database: {e}")
+            # print(f"Error connecting to database: {e}")
+            return "not connected"
     
     @asynccontextmanager
     # any function decorated with @asynccontextmanager
