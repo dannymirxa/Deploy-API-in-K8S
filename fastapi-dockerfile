@@ -9,7 +9,10 @@ RUN pip install -r requirements.txt
 COPY models/*.py models/
 COPY router/*.py router/
 COPY schemas/*.py schemas/
-COPY *.py .
+COPY database.py .
+COPY main.py .
+COPY server.py .
+COPY settings.py .
 
 EXPOSE 8000
 

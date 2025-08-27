@@ -1,6 +1,6 @@
 services:
   fastapi_app:
-    image: fastapi-employee:latest
+    image: fastapi-chinook:latest
     restart: unless-stopped
     build:
       context: .

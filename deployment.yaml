@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chinook-api-deployment
+  namespace: fastapi-chinook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chinook-api
+  template:
+    metadata:
+      labels:
+        app: chinook-api
+    spec:
+      containers:
+        - name: fastapi-chinook
+          image: fastapi-chinook
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: chinook-db
+              mountPath: /app/data
+      volumes:
+        - name: chinook-db
+          persistentVolumeClaim:
+            claimName: chinook-api-pvc
