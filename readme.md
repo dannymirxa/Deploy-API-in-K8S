@@ -17,6 +17,47 @@ git clone https://your-repo-url
 cd your-repo-name
 ```
 
+### Install dependencies
+Install fastapi, sqlalchemy and asyncpg or you can use the `requirements.txt`:
+```bash
+pip install -r requirements.txt
+```
+
+### Folder structure:
+```ascii
+/mnt/c/Projects/Deploy-API-in-K8S
+├── __init__.py                    # Initialization file for Python packages
+├── .gitignore                     # Specifies files and directories to be ignored by Git
+├── chinook_password.txt           # File containing the password for the Chinook database
+├── Chinook_PostgreSql.sql         # SQL script to set up the Chinook database schema
+├── chinook-compose.yaml           # Docker Compose configuration for Chinook services
+├── database.py                    # Handles database connections and operations
+├── fastapi-compose.yaml           # Docker Compose configuration for FastAPI services
+├── fastapi-dockerfile             # Dockerfile for building FastAPI application containers
+├── main.py                        # Entry point for the FastAPI application
+├── readme.md                      # Documentation file with an overview of the project
+├── requirements.txt               # Specifies required Python packages and dependencies
+├── server.py                      # Server-related configurations and setup
+├── settings.py                    # Configuration and environment settings for the application
+├── models                         # Directory containing data models
+│   ├── customer_model.py          # Data model for customer-related database operations
+│   └── employee_model.py          # Data model for employee-related database operations
+├── router                         # Directory containing API route definitions
+│   ├── __init__.py                # Initialization file for the router package
+│   ├── customer_router.py         # API routes for customer-related operations
+│   └── employee_router.py         # API routes for employee-related operations
+├── schemas                        # Schema definitions for request and response data
+│   ├── customer_schema.py         # Schema for customer data validation and serialization
+│   └── employee_schema.py         # Schema for employee data validation and serialization
+└── tests                          # Directory containing tests
+    ├── test_crud.py               # Unit tests for CRUD operations
+    ├── test_db.py                 # Unit tests for database connections and operations
+    └── methods_for_pytest         # Directory containing test utility methods
+        ├── methods_for_crud.py    # Helper methods for CRUD tests
+        └── methods_for_db.py      # Helper methods for database tests
+
+```
+
 ### Secrets Setup
 Create a `chinook_password.txt` in the root directory with your PostgreSQL password. This password is securely handled using Docker Secrets.
 
@@ -51,11 +92,6 @@ To re-initialize the database with fresh data:
 docker compose -f chinook-compose.yaml down -v
 docker compose -f chinook-compose.yaml up -d --build
 ```
-
-## Project Structure
-- **`chinook-compose.yaml`**: Configures Docker services, volumes, and networking for PostgreSQL.
-- **`Chinook_PostgreSql.sql`**: SQL scripts for schema and data initialization.
-- **`chinook_password.txt`**: Contains the database password, managed securely via Docker Secrets.
 
 ## Configuration
 

@@ -6,6 +6,8 @@ import pytest
 import httpx
 import pytest_asyncio
 
+# use httpx AsyncClient because FastApi TestClient does not work well with Asyncsession
+
 @pytest_asyncio.fixture
 async def client():
     async with httpx.AsyncClient(base_url="http://localhost:8000") as client:

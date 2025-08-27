@@ -7,6 +7,7 @@ import pytest
 from database import Database
 from settings import app_env_settings_local_test as settings
 
+# test connection to database
 @pytest.mark.asyncio
 async def test_ping_database():
     database_url = (

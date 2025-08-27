@@ -16,7 +16,6 @@ SELECT DISTINCT Ar."name"  FROM artist AS Ar
 	JOIN genre AS G ON T.genre_id  = G.genre_id 
 		WHERE G."name" = 'Rock' ORDER BY Ar."name" ;
 """
-# app/schemas/employee_schema.py
 
 from datetime import datetime, date
 from typing import Optional
@@ -73,9 +72,6 @@ class EmployeeTotalSales(BaseModel):
     first_name: str = Field(None, max_length=20)
     last_name: str = Field(None, max_length=20)
     totalsales: Decimal = None
-
-    # class Config:
-    #     from_attributes = True
 
 class EmployeePerformanceRequest(BaseModel):
     title: Optional[str]
