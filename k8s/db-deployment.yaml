@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f chinook-compose.yaml
+    kompose.cmd: kompose -f docker-compose.yaml -o k8s convert
     kompose.version: 1.37.0 (fb0539e64)
   labels:
     io.kompose.service: db
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -f chinook-compose.yaml
+        kompose.cmd: kompose -f docker-compose.yaml -o k8s convert
         kompose.version: 1.37.0 (fb0539e64)
       labels:
         io.kompose.service: db

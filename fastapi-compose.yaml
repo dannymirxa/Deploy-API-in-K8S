@@ -1,10 +1,10 @@
 services:
   fastapi_app:
-    image: fastapi-chinook:latest
+    image: dannymirza/fastapi-chinook:latest
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: fastapi-dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: fastapi-dockerfile
     ports:
       - "8000:8000"
     volumes:

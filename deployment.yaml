@@ -14,14 +14,25 @@ spec:
         app: chinook-api
     spec:
       containers:
-        - name: fastapi-chinook
-          image: fastapi-chinook
-          imagePullPolicy: Never
+        - env:
+          - name: ENV
+            value: production
+          image: fastapi-chinook:latest
+          name: fastapi-app
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
+              protocol: TCP
           volumeMounts:
             - name: chinook-db
               mountPath: /app/data
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "0.5"
+            limits:
+              memory: "512Mi"
+              cpu: "1"
       volumes:
         - name: chinook-db
           persistentVolumeClaim:
